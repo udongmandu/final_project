@@ -6,12 +6,14 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/udongmandu/final_project.git'
+                git branch: 'main', credentialsId: 'github-ssh-jenkins', url: 'git@github.com:udongmandu/final_project.git'
             }
         }
         stage('Build') {
             steps {
-                sh 'mvn clean package -DskipTests'
+                script {
+                    sh 'docker run --rm -v $(pwd):/app -w /app maven:4.0.0-alpha-7 mvn clean package -DskipTests'
+                }
             }
         }
         stage('Archive Artifact') {
