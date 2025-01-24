@@ -16,6 +16,7 @@ class BoardApplicationTests {
 
 	@Mock
 //	@Autowired
+	//hello
 	IBoardRepository boardRepository;
 	
 	@InjectMocks
