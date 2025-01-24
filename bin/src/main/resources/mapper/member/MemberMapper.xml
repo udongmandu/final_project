@@ -13,7 +13,7 @@
 	]]>
 	</insert>
 
-	<select id="selectMember" parameterType="string" resultType="com.example.myapp.member.model.Member">
+	<select id="selectMemberaaa" parameterType="string" resultType="com.example.myapp.member.model.Member">
 	<![CDATA[
 		SELECT 
 			userid,
