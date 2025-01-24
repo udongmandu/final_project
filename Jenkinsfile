@@ -12,7 +12,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    sh 'docker run --rm -v $(pwd):/app -w /app maven:4.0.0-alpha-7 mvn clean package -DskipTests'
+                    sh 'docker run --rm -v "$PWD":/app -w /app maven:4.0.0-alpha-7 mvn clean package -DskipTests'
                 }
             }
         }
@@ -24,14 +24,17 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t myapp-war .'
+                    sh '''
+                    docker stop myapp || true
+                    docker rm myapp || true
+                    docker build --no-cache -t myapp-war .
+                    '''
                 }
             }
         }
         stage('Run Docker Container') {
             steps {
                 script {
-                    sh 'docker stop myapp || true && docker rm myapp || true'
                     sh 'docker run -d --name myapp -p 8081:8080 myapp-war'
                 }
             }
