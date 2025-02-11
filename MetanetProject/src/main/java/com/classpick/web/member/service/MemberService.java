@@ -3,9 +3,11 @@ package com.classpick.web.member.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,6 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberService implements IMemberService {
 
 	private final JavaMailSender javaMailSender;
+	private final StringRedisTemplate redisTemplate;
 	private final RedisUtil redisUtil;
 	private static final String senderEmail = "neighclova@gmail.com";
 
@@ -126,9 +129,8 @@ public class MemberService implements IMemberService {
 			templateData = authCode;
 
 			// 인증 코드 Redis 저장
-			if (data instanceof String) {
-				redisUtil.setDataExpire(email, (String) authCode, 60 * 30L);
-			}
+			redisUtil.setDataExpire(email, (String) authCode, 60 * 30L);
+			
 
 		} else if ("lecture_schedule".equals(type)) {
 			subject = "[Metanet] 강의 일정 안내";
